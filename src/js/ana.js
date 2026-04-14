@@ -41,25 +41,34 @@ async function onLoadMore() {
 
 async function handleFetch() {
   try {
+    // 1. İstek başladığında loader'ı göster (İsteğe bağlı ama önerilir)
     const data = await fetchImages(query, page);
 
-    if (data.hits.length === 0) {
-      // "Sonuç bulunamadı" uyarısı buraya
-      return;
-    }
-
+    // 2. Gelen veriyi ekrana bas
     renderGallery(data.hits);
+
+    // 3. TOPLAM YÜKLENEN SAYIYI GÜNCELLE (Kritik nokta)
     totalLoaded += data.hits.length;
     lightbox.refresh();
 
-    if (totalLoaded >= data.totalHits) {
-      loadMoreBtn.style.display = 'none';
-      // "Koleksiyonun sonuna ulaştınız" mesajı buraya
+    // 4. KOLEKSİYON SONU KONTROLÜ
+    // Eğer toplam yüklenen sayı, API'den gelen toplam sonuca eşit veya büyükse
+    if (totalLoaded >= data.totalHits || data.hits.length < 40) {
+      loadMoreBtn.style.display = 'none'; // Butonu gizle
+
+      // Ödevde istenen tam mesajı göster
+      iziToast.info({
+        title: 'End of results',
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'topRight',
+      });
     } else {
+      // Hala yüklenecek resim varsa butonu göster
       loadMoreBtn.style.display = 'block';
     }
   } catch (error) {
     console.error('Hata:', error);
+    iziToast.error({ message: 'Something went wrong!' });
   }
 }
 
@@ -72,10 +81,22 @@ function renderGallery(images) {
         <img src="${img.webformatURL}" alt="${img.tags}" loading="lazy" />
       </a>
       <div class="info">
-        <p><b>Likes:</b> ${img.likes}</p>
-        <p><b>Views:</b> ${img.views}</p>
-        <p><b>Comments:</b> ${img.comments}</p>
-        <p><b>Downloads:</b> ${img.downloads}</p>
+        <div class="info-item">
+          <b>Likes</b>
+          <span>${img.likes}</span>
+        </div>
+        <div class="info-item">
+          <b>Views</b>
+          <span>${img.views}</span>
+        </div>
+        <div class="info-item">
+          <b>Comments</b>
+          <span>${img.comments}</span>
+        </div>
+        <div class="info-item">
+          <b>Downloads</b>
+          <span>${img.downloads}</span>
+        </div>
       </div>
     </div>
   `
@@ -87,12 +108,16 @@ function renderGallery(images) {
 
 // Yumuşak Kaydırma (Smooth Scroll) Fonksiyonu
 function smoothScroll() {
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
+  // Galerideki ilk kartın yüksekliğini al
+  const galleryElement = document.querySelector('.gallery');
+  if (galleryElement.firstElementChild) {
+    const { height: cardHeight } =
+      galleryElement.firstElementChild.getBoundingClientRect();
 
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
+    // Sayfayı 2 kart boyu aşağı kaydır
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth', // Yumuşak kaydırma efekti
+    });
+  }
 }

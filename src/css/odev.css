@@ -31,6 +31,18 @@
   border-radius: 4px;
 }
 
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+input[type='text'] {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
 /* Basit bir Loader (Yükleniyor simgesi) */
 .loader {
   width: 48px;
@@ -40,6 +52,27 @@
   border-radius: 50%;
   display: none; /* JS ile arama sırasında 'block' yapılacak */
   animation: rotation 1s linear infinite;
+}
+
+.info {
+  display: flex;
+  justify-content: space-around; /* Verileri eşit aralıklarla yan yana dizer */
+  align-items: center;
+  padding: 10px 5px;
+  background-color: #fff;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column; /* Yazıyı üstte, rakamı altta tutar */
+  align-items: center;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.info-item b {
+  margin-bottom: 2px;
+  color: #2e2e2e;
 }
 
 @keyframes rotation {
