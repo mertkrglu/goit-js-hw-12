@@ -56,10 +56,23 @@ input[type='text'] {
 
 .info {
   display: flex;
-  justify-content: space-around; /* Verileri eşit aralıklarla yan yana dizer */
-  align-items: center;
-  padding: 10px 5px;
+  justify-content: space-around; /* Elemanları yatayda eşit dağıtır */
+  padding: 8px 4px;
   background-color: #fff;
+}
+.info b {
+  font-weight: 600;
+  font-size: 12px; /* Başlıkları biraz daha belirgin yapar */
+}
+
+.info p {
+  display: flex;
+  flex-direction: column; /* Başlık ve rakamı alt alta getirir */
+  align-items: center; /* Ortalar */
+  margin: 0;
+  font-size: 17px; /* 5'li dizilimde küçük font daha iyi durur */
+  color: #2e2f42;
+  line-height: 1.5;
 }
 
 .info-item {
