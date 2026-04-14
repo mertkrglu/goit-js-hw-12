@@ -2,6 +2,8 @@ import { fetchImages } from './odev.js';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 // iziToast gibi bir kütüphane kullanıyorsanız import etmeyi unutmayın
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 let query = '';
 let page = 1;
@@ -41,25 +43,39 @@ async function onLoadMore() {
 
 async function handleFetch() {
   try {
+    // Loader'ı göster (HTML'de loader'ın varsa)
+    document.querySelector('.loader').style.display = 'block';
+
     const data = await fetchImages(query, page);
 
-    if (data.hits.length === 0) {
-      // "Sonuç bulunamadı" uyarısı buraya
+    if (data.hits.length === 0 && page === 1) {
+      iziToast.error({ message: 'Sorry, no images found.' });
       return;
     }
 
     renderGallery(data.hits);
+
+    // Toplam yüklenen sayıyı kümülatif olarak artır
     totalLoaded += data.hits.length;
     lightbox.refresh();
 
-    if (totalLoaded >= data.totalHits) {
-      loadMoreBtn.style.display = 'none';
-      // "Koleksiyonun sonuna ulaştınız" mesajı buraya
+    // KOLEKSİYON SONU KONTROLÜ
+    // Pixabay bazen totalHits'ten daha az resim döner,
+    // bu yüzden "data.hits.length < 40" (sayfa başı miktar) kontrolü hayat kurtarır.
+    if (totalLoaded >= data.totalHits || data.hits.length < 40) {
+      loadMoreBtn.style.display = 'none'; // Butonu gizle
+
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'topRight',
+      });
     } else {
-      loadMoreBtn.style.display = 'block';
+      loadMoreBtn.style.display = 'block'; // Hala resim varsa göster
     }
   } catch (error) {
     console.error('Hata:', error);
+  } finally {
+    document.querySelector('.loader').style.display = 'none';
   }
 }
 
