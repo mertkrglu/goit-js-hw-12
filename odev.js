@@ -1,26 +1,14 @@
-import"./assets/modulepreload-polyfill-B5Qt9EMX.js";import{a as c,S as d}from"./assets/vendor-BI_19Wih.js";const h="25016149-459cc745d60a20aa9a47a0430",p="https://pixabay.com/api/";async function m(e,a){const t={key:h,q:e,image_type:"photo",orientation:"horizontal",safesearch:!0,page:a,per_page:40};return(await c.get(p,{params:t})).data}let s="",r=1,n=0;const y=document.querySelector("#search-form"),i=document.querySelector(".gallery"),o=document.querySelector(".load-more");o.style.display="none";let u=new d(".gallery a");y.addEventListener("submit",f);o.addEventListener("click",g);async function f(e){e.preventDefault(),s=e.currentTarget.elements.searchQuery.value.trim(),s&&(r=1,n=0,i.innerHTML="",o.style.display="none",await l())}async function g(){r+=1,await l(),b()}async function l(){try{const e=await m(s,r);v(e.hits),n+=e.hits.length,u.refresh(),n>=e.totalHits||e.hits.length<40?(o.style.display="none",iziToast.info({title:"End of results",message:"We're sorry, but you've reached the end of search results.",position:"topRight"})):o.style.display="block"}catch(e){console.error("Hata:",e),iziToast.error({message:"Something went wrong!"})}}function v(e){const a=e.map(t=>`
+import"./assets/modulepreload-polyfill-B5Qt9EMX.js";import{a as i,S as d}from"./assets/vendor-BI_19Wih.js";const p="25016149-459cc745d60a20aa9a47a0430",h="https://pixabay.com/api/";async function y(e,o){const t={key:p,q:e,image_type:"photo",orientation:"horizontal",safesearch:!0,page:o,per_page:40};return(await i.get(h,{params:t})).data}let n="",s=1,r=0;const u=document.querySelector("#search-form"),l=document.querySelector(".gallery"),a=document.querySelector(".load-more");a.style.display="none";let m=new d(".gallery a");u.addEventListener("submit",f);a.addEventListener("click",g);async function f(e){e.preventDefault(),n=e.currentTarget.elements.searchQuery.value.trim(),n&&(s=1,r=0,l.innerHTML="",a.style.display="none",await c())}async function g(){s+=1,await c(),w()}async function c(){try{const e=await y(n,s);if(e.hits.length===0)return;b(e.hits),r+=e.hits.length,m.refresh(),r>=e.totalHits?a.style.display="none":a.style.display="block"}catch(e){console.error("Hata:",e)}}function b(e){const o=e.map(t=>`
     <div class="photo-card">
       <a href="${t.largeImageURL}">
         <img src="${t.webformatURL}" alt="${t.tags}" loading="lazy" />
       </a>
       <div class="info">
-        <div class="info-item">
-          <b>Likes</b>
-          <span>${t.likes}</span>
-        </div>
-        <div class="info-item">
-          <b>Views</b>
-          <span>${t.views}</span>
-        </div>
-        <div class="info-item">
-          <b>Comments</b>
-          <span>${t.comments}</span>
-        </div>
-        <div class="info-item">
-          <b>Downloads</b>
-          <span>${t.downloads}</span>
-        </div>
+        <p><b>Likes:</b> ${t.likes}</p>
+        <p><b>Views:</b> ${t.views}</p>
+        <p><b>Comments:</b> ${t.comments}</p>
+        <p><b>Downloads:</b> ${t.downloads}</p>
       </div>
     </div>
-  `).join("");i.insertAdjacentHTML("beforeend",a)}function b(){const e=document.querySelector(".gallery");if(e.firstElementChild){const{height:a}=e.firstElementChild.getBoundingClientRect();window.scrollBy({top:a*2,behavior:"smooth"})}}
+  `).join("");l.insertAdjacentHTML("beforeend",o)}function w(){const{height:e}=document.querySelector(".gallery").firstElementChild.getBoundingClientRect();window.scrollBy({top:e*2,behavior:"smooth"})}
 //# sourceMappingURL=odev.js.map
